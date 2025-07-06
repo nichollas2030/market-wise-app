@@ -1,0 +1,76 @@
+import axios from 'axios';
+
+// API Configuration
+export const API_CONFIG = {
+  COINCAP_BASE_URL: 'https://api.coincap.io/v2',
+  AGENT_FINANCE_BASE_URL: 'http://localhost:8000',
+  REQUEST_TIMEOUT: 10000,
+  RETRY_ATTEMPTS: 3,
+  CACHE_TIME: 5 * 60 * 1000, // 5 minutes
+  STALE_TIME: 2 * 60 * 1000, // 2 minutes
+} as const;
+
+// CoinCap API Client
+export const coinCapApi = axios.create({
+  baseURL: API_CONFIG.COINCAP_BASE_URL,
+  timeout: API_CONFIG.REQUEST_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+});
+
+// AgentFinance API Client
+export const agentFinanceApi = axios.create({
+  baseURL: API_CONFIG.AGENT_FINANCE_BASE_URL,
+  timeout: API_CONFIG.REQUEST_TIMEOUT,
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+});
+
+// Request interceptors for error handling
+coinCapApi.interceptors.request.use(
+  (config) => {
+    console.log(`[CoinCap API] ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('[CoinCap API] Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+coinCapApi.interceptors.response.use(
+  (response) => {
+    console.log(`[CoinCap API] Response: ${response.status} ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error('[CoinCap API] Response error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
+agentFinanceApi.interceptors.request.use(
+  (config) => {
+    console.log(`[AgentFinance API] ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('[AgentFinance API] Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+agentFinanceApi.interceptors.response.use(
+  (response) => {
+    console.log(`[AgentFinance API] Response: ${response.status} ${response.config.url}`);
+    return response;
+  },
+  (error) => {
+    console.error('[AgentFinance API] Response error:', error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
