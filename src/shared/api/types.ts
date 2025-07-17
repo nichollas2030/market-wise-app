@@ -35,9 +35,25 @@ export interface AnalysisResponse {
   report: string; // Report in text/markdown format
 }
 
+export interface LLMProviderStatus {
+  groq: boolean;
+  openai: boolean;
+  anthropic: boolean;
+}
+
 export interface HealthResponse {
   status: 'healthy' | 'unhealthy';
-  timestamp: number;
+  llm_providers: LLMProviderStatus;
+  timestamp: string;
+}
+
+// AI Analysis Types
+export interface AIAnalysisState {
+  isLoading: boolean;
+  report: string | null;
+  error: string | null;
+  activeLLM: 'groq' | 'openai' | 'anthropic' | null;
+  generationTime: number | null;
 }
 
 // Utility Types

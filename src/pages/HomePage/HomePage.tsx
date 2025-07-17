@@ -1,18 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useCryptoAssets } from '../../shared/api';
-import { useCryptoStore, useUIStore } from '../../app/store';
+import { useCryptoAssets, useFilteredCryptos } from '../../shared/api';
+import { useCryptoStore } from '../../app/store';
 import { LoadingState } from '../../shared/ui';
-import SearchBar from '../../features/search/SearchBar';
+
+import { APIStatus } from '../../components/APIStatus';
+import Header from '../../components/Header';
+import SearchResults from '../../components/SearchResults';
 import TopPricesWidget from '../../widgets/top-rankings/TopPricesWidget';
 import TopVolumesWidget from '../../widgets/top-rankings/TopVolumesWidget';
 import TopChangesWidget from '../../widgets/top-rankings/TopChangesWidget';
 import { generateRankings } from '../../shared/lib/utils/formatters';
+import { Button } from '../../components/ui/button';
+import { X } from 'lucide-react';
 
 const HomePage: React.FC = () => {
   const { searchQuery, setSearchQuery, updateRankings } = useCryptoStore();
-  const { theme, toggleTheme } = useUIStore();
   const { data: cryptos, isLoading, error } = useCryptoAssets();
+  
+  // Estado dos filtros avançados
+  const [advancedFilters, setAdvancedFilters] = useState({
+    priceRange: [0, 100000] as [number, number],
+    marketCapRange: [0, 2000000000000] as [number, number],
+    changeRange: [-50, 50] as [number, number],
+    category: 'all' as 'all' | 'rising' | 'falling' | 'stable'
+  });
+  
+  // Filtrar criptomoedas baseado na busca e filtros
+  const filteredCryptos = useFilteredCryptos(
+    cryptos || [], 
+    searchQuery, 
+    advancedFilters
+  );
 
   useEffect(() => {
     if (cryptos) {
@@ -34,69 +53,86 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-white/10 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-3"
-            >
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">₿</span>
-              </div>
-              <h1 className="text-2xl font-bold text-gradient-primary">CryptoApp</h1>
-            </motion.div>
-            
-            <div className="flex items-center gap-4">
-              <SearchBar
-                value={searchQuery}
-                onChange={setSearchQuery}
-                className="w-80 max-w-md"
-              />
-              
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg hover:bg-white/10 transition-smooth"
-              >
-                {theme === 'dark' ? '🌞' : '🌙'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header Fixo */}
+      <Header 
+        cryptos={cryptos || []}
+        onFilterChange={(filters) => {
+          setAdvancedFilters({
+            priceRange: filters.priceRange,
+            marketCapRange: filters.marketCapRange,
+            changeRange: filters.changeRange,
+            category: filters.category
+          });
+        }}
+      />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {isLoading ? (
-          <LoadingState text="Loading cryptocurrency data..." size="lg" className="py-20" />
+          <LoadingState text="Loading cryptocurrency data..." size="lg" className="py-12 sm:py-16 lg:py-20" />
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8 lg:space-y-10"
           >
-            {/* Rankings Section */}
-            <section>
-              <h2 className="text-2xl font-bold mb-6 text-gradient-primary">Market Rankings</h2>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <TopPricesWidget cryptos={cryptos || []} loading={isLoading} />
-                <TopVolumesWidget cryptos={cryptos || []} loading={isLoading} />
-                <TopChangesWidget cryptos={cryptos || []} loading={isLoading} />
-              </div>
-            </section>
-
+            {/* Search Results or Rankings Section */}
+            {(searchQuery || advancedFilters.category !== 'all') ? (
+              <section>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gradient-primary">
+                    {searchQuery 
+                      ? `Search Results for "${searchQuery}"`
+                      : `${advancedFilters.category.charAt(0).toUpperCase() + advancedFilters.category.slice(1)} Cryptocurrencies`
+                    }
+                  </h2>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setAdvancedFilters({
+                        priceRange: [0, 100000],
+                        marketCapRange: [0, 2000000000000],
+                        changeRange: [-50, 50],
+                        category: 'all'
+                      });
+                    }}
+                    className="flex items-center gap-2 w-full sm:w-auto"
+                  >
+                    <X className="w-4 h-4" />
+                    <span className="text-sm sm:text-base">Clear Filters</span>
+                  </Button>
+                </div>
+                <SearchResults 
+                  cryptos={filteredCryptos} 
+                  searchQuery={searchQuery || 'filtered'} 
+                  loading={isLoading} 
+                />
+              </section>
+            ) : (
+              <section>
+                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold mb-4 sm:mb-6 lg:mb-8 text-gradient-primary">Market Rankings</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+                  <TopPricesWidget cryptos={cryptos || []} loading={isLoading} />
+                  <TopVolumesWidget cryptos={cryptos || []} loading={isLoading} />
+                  <TopChangesWidget cryptos={cryptos || []} loading={isLoading} />
+                </div>
+              </section>
+            )}
             {/* Live Status */}
             <section className="text-center">
               <motion.div
-                className="inline-flex items-center gap-2 px-4 py-2 glass rounded-full"
+                className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-3 glass rounded-full"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
                 <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
-                <span className="text-sm text-muted-foreground">
-                  Live data • {cryptos?.length || 0} cryptocurrencies
+                <span className="text-xs sm:text-sm lg:text-base text-muted-foreground">
+                  Live data • {(searchQuery || advancedFilters.category !== 'all') 
+                    ? `${filteredCryptos.length} results` 
+                    : `${cryptos?.length || 0} cryptocurrencies`
+                  }
                 </span>
               </motion.div>
             </section>

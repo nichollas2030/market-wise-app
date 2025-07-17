@@ -2,22 +2,28 @@ import axios from 'axios';
 
 // API Configuration
 export const API_CONFIG = {
-  COINCAP_BASE_URL: 'https://api.coincap.io/v2',
-  AGENT_FINANCE_BASE_URL: 'http://localhost:8000',
-  REQUEST_TIMEOUT: 10000,
-  RETRY_ATTEMPTS: 3,
-  CACHE_TIME: 5 * 60 * 1000, // 5 minutes
-  STALE_TIME: 2 * 60 * 1000, // 2 minutes
+  COINCAP_BASE_URL: import.meta.env.VITE_COINCAP_BASE_URL || 'https://api.coincap.io/v2',
+  AGENT_FINANCE_BASE_URL: import.meta.env.VITE_AGENT_FINANCE_BASE_URL || 'http://localhost:8000',
+  REQUEST_TIMEOUT: Number(import.meta.env.VITE_REQUEST_TIMEOUT) || 10000,
+  RETRY_ATTEMPTS: Number(import.meta.env.VITE_RETRY_ATTEMPTS) || 3,
+  CACHE_TIME: Number(import.meta.env.VITE_CACHE_TIME) || 5 * 60 * 1000, // 5 minutes
+  STALE_TIME: Number(import.meta.env.VITE_STALE_TIME) || 2 * 60 * 1000, // 2 minutes
 } as const;
 
 // CoinCap API Client
+const coinCapApiHeaders: Record<string, string> = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+};
+
+if (import.meta.env.VITE_COINCAP_API_KEY) {
+  coinCapApiHeaders['Authorization'] = `Bearer ${import.meta.env.VITE_COINCAP_API_KEY}`;
+}
+
 export const coinCapApi = axios.create({
   baseURL: API_CONFIG.COINCAP_BASE_URL,
   timeout: API_CONFIG.REQUEST_TIMEOUT,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  },
+  headers: coinCapApiHeaders,
 });
 
 // AgentFinance API Client
