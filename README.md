@@ -13,6 +13,21 @@ Market Wise App é uma aplicação web moderna e completa para análise de cript
 - 📱 **Design Responsivo**: Interface adaptável para todos os dispositivos
 - 🌙 **Tema Escuro/Claro**: Modo noturno e claro
 - 📈 **Widgets Interativos**: Rankings e métricas em tempo real
+- 🔐 **Segurança**: Sanitização de dados, rate limiting e proteção XSS
+
+---
+
+## 🔐 Segurança
+
+Esta aplicação implementa várias medidas de segurança. Consulte [SECURITY.md](SECURITY.md) para detalhes completos sobre:
+
+- Sanitização de entrada de dados
+- Proteção contra XSS
+- Rate limiting
+- Headers de segurança
+- Configuração segura de ambiente
+
+**⚠️ IMPORTANTE**: Nunca commite o arquivo `.env` ou exponha chaves de API no código fonte.
 
 ---
 
