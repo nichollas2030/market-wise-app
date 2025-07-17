@@ -86,6 +86,7 @@ market-wise-app/
 ### 1. 📊 **Análise de Criptomoedas em Tempo Real**
 
 #### Dados de Mercado
+
 - Preços atualizados via CoinCap API
 - Volume de negociação
 - Variação percentual (24h, 7d, 30d)
@@ -93,6 +94,7 @@ market-wise-app/
 - Rankings por diferentes métricas
 
 #### Widgets Interativos
+
 - **Top Prices**: Maiores preços
 - **Top Volumes**: Maiores volumes
 - **Top Changes**: Maiores variações
@@ -101,6 +103,7 @@ market-wise-app/
 ### 2. 🤖 **Relatórios AI Avançados**
 
 #### Integração AGENTFINANCE
+
 - **Análise Individual**: Relatórios detalhados por criptomoeda
 - **Análise Comparativa**: Comparação entre múltiplas criptos
 - **Múltiplos LLMs**: Groq (2-5s), OpenAI (10-30s), Anthropic (15-45s)
@@ -108,6 +111,7 @@ market-wise-app/
 - **Monitoramento em Tempo Real**: Status dos LLMs
 
 #### Tipos de Relatório
+
 - **Análise Técnica**: Indicadores e padrões
 - **Análise Fundamental**: Fundamentos e métricas
 - **Análise Preditiva**: Tendências futuras
@@ -116,6 +120,7 @@ market-wise-app/
 ### 3. 💰 **Simulação de Investimentos**
 
 #### Módulo Completo de Simulação
+
 - **Wizard Multi-Step**: Interface guiada em 5 passos
 - **Algoritmos de Otimização**:
   - Sharpe Ratio (baixa complexidade)
@@ -125,6 +130,7 @@ market-wise-app/
   - IA Customizada (alta complexidade)
 
 #### Funcionalidades Avançadas
+
 - **Seleção de Criptomoedas**: Interface intuitiva
 - **Configuração de Parâmetros**: Timeframe, tipo de otimização
 - **Gestão de Risco**: Tolerância conservadora/moderada/agressiva
@@ -133,6 +139,7 @@ market-wise-app/
 - **Histórico de Simulações**: Persistência e reutilização
 
 #### Métricas Calculadas
+
 - **Performance**: Retorno total, retorno anualizado
 - **Risco**: Volatilidade, VaR, CVaR, Beta
 - **Eficiência**: Sharpe ratio, drawdown máximo
@@ -141,6 +148,7 @@ market-wise-app/
 ### 4. 🔍 **Sistema de Busca Inteligente**
 
 #### Busca Avançada
+
 - **Autocomplete**: Sugestões em tempo real
 - **Filtros Múltiplos**: Preço, market cap, variação
 - **Categorização**: Rising, Falling, Stable
@@ -148,6 +156,7 @@ market-wise-app/
 - **Sugestões Populares**: Acesso rápido
 
 #### Interface Melhorada
+
 - **Design Responsivo**: Adaptável a todos os dispositivos
 - **Feedback Visual**: Estados de loading e resultados
 - **Ordenação**: Múltiplos critérios
@@ -156,12 +165,14 @@ market-wise-app/
 ### 5. 📱 **Interface Responsiva e Moderna**
 
 #### Design System
+
 - **Tema Adaptativo**: Claro/escuro automático
 - **Componentes Reutilizáveis**: shadcn/ui
 - **Animações Suaves**: Framer Motion
 - **Acessibilidade**: ARIA labels e navegação por teclado
 
 #### Experiência do Usuário
+
 - **Loading States**: Feedback visual durante carregamentos
 - **Error Handling**: Tratamento elegante de erros
 - **Toast Notifications**: Notificações não intrusivas
@@ -172,7 +183,8 @@ market-wise-app/
 ## 🔧 Configuração e Instalação
 
 ### Pré-requisitos
-- Node.js 18+ 
+
+- Node.js 18+
 - npm ou yarn
 - Git
 
@@ -224,6 +236,7 @@ npm run preview      # Preview do build
 ## 📊 APIs e Integrações
 
 ### 1. **CoinCap API**
+
 - **Base URL**: `https://api.coincap.io/v2`
 - **Endpoints**:
   - `GET /assets` - Lista de criptomoedas
@@ -231,6 +244,7 @@ npm run preview      # Preview do build
   - `GET /assets/{id}/history` - Histórico de preços
 
 ### 2. **AGENTFINANCE API**
+
 - **Base URL**: `http://localhost:8000`
 - **Endpoints**:
   - `GET /reports/health` - Status da API e LLMs
@@ -239,6 +253,7 @@ npm run preview      # Preview do build
   - `POST /api/simulation/backtest` - Backtesting
 
 ### 3. **Simulation API**
+
 - **Endpoints**:
   - `POST /api/simulation/optimize` - Otimização
   - `POST /api/simulation/backtest` - Backtesting
@@ -250,18 +265,18 @@ npm run preview      # Preview do build
 ## 🎨 Componentes Principais
 
 ### 1. **SimulationWizard**
+
 ```tsx
-<SimulationWizard 
-  isOpen={isWizardOpen} 
-  onClose={handleClose} 
-/>
+<SimulationWizard isOpen={isWizardOpen} onClose={handleClose} />
 ```
+
 - Wizard de 5 passos para simulação
 - Validação em tempo real
 - Estados de loading e erro
 - Animações suaves
 
 ### 2. **SearchBar**
+
 ```tsx
 <SearchBar
   value={searchQuery}
@@ -270,26 +285,31 @@ npm run preview      # Preview do build
   onFilterChange={handleFilterChange}
 />
 ```
+
 - Autocomplete inteligente
 - Filtros avançados
 - Histórico de buscas
 - Sugestões populares
 
 ### 3. **AIAnalysis**
+
 ```tsx
 <AIAnalysis crypto={crypto} />
 ```
+
 - Geração de relatórios AI
 - Status dos LLMs
 - Download de relatórios
 - Análise individual/comparativa
 
 ### 4. **TopRankings Widgets**
+
 ```tsx
 <TopPricesWidget cryptos={cryptos} />
 <TopVolumesWidget cryptos={cryptos} />
 <TopChangesWidget cryptos={cryptos} />
 ```
+
 - Rankings em tempo real
 - Atualização automática
 - Design responsivo
@@ -300,6 +320,7 @@ npm run preview      # Preview do build
 ## 📈 Estado Global (Zustand)
 
 ### 1. **CryptoStore**
+
 ```typescript
 interface CryptoStore {
   cryptos: CryptoAsset[];
@@ -307,7 +328,7 @@ interface CryptoStore {
   selectedCrypto: CryptoAsset | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   setCryptos: (cryptos: CryptoAsset[]) => void;
   setSearchQuery: (query: string) => void;
@@ -316,6 +337,7 @@ interface CryptoStore {
 ```
 
 ### 2. **SimulationStore**
+
 ```typescript
 interface SimulationStore {
   selectedCoins: CryptoAsset[];
@@ -324,7 +346,7 @@ interface SimulationStore {
   simulationHistory: SimulationHistoryItem[];
   isWizardOpen: boolean;
   currentStep: number;
-  
+
   // Actions
   setSelectedCoins: (coins: CryptoAsset[]) => void;
   updateParams: (params: Partial<SimulationRequest>) => void;
@@ -334,12 +356,13 @@ interface SimulationStore {
 ```
 
 ### 3. **UIStore**
+
 ```typescript
 interface UIStore {
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   sidebarOpen: boolean;
   notifications: Notification[];
-  
+
   // Actions
   toggleTheme: () => void;
   setSidebarOpen: (open: boolean) => void;
@@ -352,6 +375,7 @@ interface UIStore {
 ## 🔄 Hooks Customizados
 
 ### 1. **useCrypto**
+
 ```typescript
 const { data: cryptos, isLoading, error } = useCrypto();
 const { mutate: generateReport } = useCryptoAnalysis();
@@ -359,6 +383,7 @@ const { data: health } = useAgentFinanceHealth();
 ```
 
 ### 2. **useSimulation**
+
 ```typescript
 const { mutate: optimizePortfolio } = usePortfolioSimulation();
 const { data: history } = useSimulationHistory();
@@ -366,11 +391,12 @@ const { mutate: deleteSimulation } = useDeleteSimulation();
 ```
 
 ### 3. **useFilteredCryptos**
+
 ```typescript
 const filteredCryptos = useFilteredCryptos(cryptos, searchQuery, {
   priceRange: [0, 100000],
-  category: 'rising',
-  marketCapRange: [0, 1000000000]
+  category: "rising",
+  marketCapRange: [0, 1000000000],
 });
 ```
 
@@ -392,18 +418,21 @@ const filteredCryptos = useFilteredCryptos(cryptos, searchQuery, {
 ### Páginas Principais
 
 1. **HomePage** (`/`)
+
    - Rankings de criptomoedas
    - Barra de busca
    - Status das APIs
    - Widgets interativos
 
 2. **CryptoDetailPage** (`/crypto/:id`)
+
    - Detalhes da criptomoeda
    - Análise AI
    - Gráficos de performance
    - Métricas avançadas
 
 3. **SimulationPage** (`/simulation`)
+
    - Dashboard de simulações
    - Histórico de simulações
    - Wizard de nova simulação
@@ -420,24 +449,28 @@ const filteredCryptos = useFilteredCryptos(cryptos, searchQuery, {
 ## 🎯 Funcionalidades Avançadas
 
 ### 1. **Sistema de Cache Inteligente**
+
 - React Query para cache de dados
 - Invalidação automática
 - Background refetching
 - Otimistic updates
 
 ### 2. **Gestão de Estado Persistente**
+
 - Zustand com middleware de persistência
 - LocalStorage para dados importantes
 - Sincronização entre abas
 - Backup automático
 
 ### 3. **Tratamento de Erros Robusto**
+
 - Error boundaries
 - Fallbacks elegantes
 - Retry automático
 - Logging estruturado
 
 ### 4. **Performance Otimizada**
+
 - Lazy loading de componentes
 - Code splitting automático
 - Memoização de componentes
@@ -448,6 +481,7 @@ const filteredCryptos = useFilteredCryptos(cryptos, searchQuery, {
 ## 🧪 Testes e Qualidade
 
 ### Estrutura de Testes
+
 ```bash
 src/
 ├── __tests__/           # Testes unitários
@@ -456,6 +490,7 @@ src/
 ```
 
 ### Scripts de Teste
+
 ```bash
 npm run test             # Executar testes
 npm run test:watch       # Testes em modo watch
@@ -468,17 +503,20 @@ npm run test:e2e         # Testes end-to-end
 ## 🚀 Deploy e Produção
 
 ### Build de Produção
+
 ```bash
 npm run build
 ```
 
 ### Configuração de Servidor
+
 - **Nginx**: Configuração para SPA
 - **CDN**: Distribuição de assets
 - **HTTPS**: Certificados SSL
 - **Compression**: Gzip/Brotli
 
 ### Monitoramento
+
 - **Error Tracking**: Sentry
 - **Analytics**: Google Analytics
 - **Performance**: Lighthouse
@@ -507,20 +545,6 @@ npm run build
 
 ---
 
-## 📄 Licença
-
-Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
----
-
-## 📞 Suporte e Contato
-
-- **Issues**: [GitHub Issues](https://github.com/username/market-wise-app/issues)
-- **Documentação**: [Wiki](https://github.com/username/market-wise-app/wiki)
-- **Email**: support@marketwiseapp.com
-
----
-
 ## 🎉 Agradecimentos
 
 - **CoinCap**: Dados de mercado em tempo real
@@ -532,4 +556,4 @@ Este projeto está licenciado sob a MIT License - veja o arquivo [LICENSE](LICEN
 
 ---
 
-*Market Wise App - Transformando dados em insights inteligentes* 🚀
+_Market Wise App - Transformando dados em insights inteligentes_ 🚀
